@@ -3,38 +3,40 @@
 
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js"></script>
     <script type="text/javascript" src="https://cdn.rawgit.com/ricmoo/aes-js/e27b99df/index.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    <style>
-        fieldset {
-            padding: 0;
-            border: 0;
-            margin-top: 25px;
-        }
-    </style>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>	
+	<script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+	<script src="Polyline.encoded.js"></script>
+	<style>
+    fieldset { padding:0; border:0; margin-top:25px; }
+  </style>
 </head>
 
 <body>
     <div id="dialog-form" title="Enter password:">
         <form>
-            <fieldset>
+            <fieldset>             
                 <input type="password" name="password" id="password" value="xxxxxxx" class="text ui-widget-content ui-corner-all">
                 <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
             </fieldset>
         </form>
     </div>
 
-    <div id="plots">
+	  
+	<div id="map" style="height: 250px"></div>
+    <div id="plots">				
+		<hr>
         <canvas id="plotDistance" width="1024" height="200" style="border:1px solid #000000;"></canvas>
         <hr>
         <canvas id="plotElevation" width="1024" height="200" style="border:1px solid #000000;"></canvas>
         <hr>
         <canvas id="plotSpeed" width="1024" height="200" style="border:1px solid #000000;"></canvas>
         <hr>
-        <canvas id="plotCalories" width="1024" height="200" style="border:1px solid #000000;"></canvas>
+        <canvas id="plotCalories" width="1024" height="200" style="border:1px solid #000000;"></canvas>			
     </div>
 </body>
 
@@ -43,12 +45,12 @@
 <script type="text/javascript">
     $("#plots").hide();
 
-    $(document).ready(function() {
+    $(document).ready(function() {					
         var x_range = [];
 
         dialog = $("#dialog-form").dialog({
             closeOnEscape: false,
-            resizable: false,
+			resizable: false,
             open: function(event, ui) {
                 $(".ui-dialog-titlebar-close").hide();
             },
@@ -64,6 +66,7 @@
                         url: "https://www.strava.com/api/v3/athlete/activities?access_token=" + token + "&per_page=200",
                         dataType: 'jsonp',
                         success: function(json) {
+							mapData(json);
                             createXAxis(json);
                             plotDistance(json);
                             plotSpeed(json);
@@ -125,7 +128,7 @@
                         borderWidth: 1,
                         fill: false
                     }, {
-                        type: 'line',
+						type:'line',
                         label: "Cumulative",
                         yAxisID: "y-axis-1",
                         "data": cum,
@@ -209,9 +212,9 @@
                         borderColor: "#FF3333",
                         borderWidth: 1
                     }, {
-                        type: 'line',
-                        showLine: false,
-                        pointStyle: 'circle',
+						type: 'line',
+						showLine: false,
+						pointStyle:'circle',
                         fill: false,
                         label: 'Avg Speed',
                         data: avg_speed,
@@ -287,18 +290,18 @@
                         borderColor: "#FF3333",
                         borderWidth: 1
                     }, {
-                        type: 'line',
-                        showLine: false,
-                        pointStyle: 'triangle',
+						type:'line',
+						showLine: false,
+						pointStyle:'triangle',
                         fill: false,
                         label: 'Min Elevation',
                         data: min_elevation,
                         borderColor: "#3e95cd",
                         borderWidth: 1
                     }, {
-                        type: 'line',
-                        showLine: false,
-                        pointStyle: 'circle',
+						type:'line',
+						showLine: false,
+						pointStyle:'circle',
                         fill: false,
                         label: 'Max Elevation',
                         data: max_elevation,
@@ -378,7 +381,7 @@
                         yAxisID: "y-axis-0",
                         borderWidth: 1
                     }, {
-                        type: 'line',
+						type: 'line',		
                         fill: false,
                         label: "Cumulative",
                         yAxisID: "y-axis-1",
@@ -452,5 +455,40 @@
 
             return aesjs.utils.utf8.fromBytes(decryptedBytes);
         }
+		
+		function mapData(json)
+		{
+		var polylinePoints = [];
+		
+		for(var i = 0; i<json.length;i++)
+		{
+			var t =json[i].map.summary_polyline
+			var polyline = L.Polyline.fromEncoded(t);
+			var lat = polyline.getLatLngs();
+			polylinePoints.push(lat);
+		}
+		
+		 var map = new L.Map('map');                       
+                
+      	 L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
+            maxZoom: 18
+         }).addTo(map);
+         map.attributionControl.setPrefix('');		 
+		    
+         var polylineOptions = {
+               color: 'blue',
+               weight: 1,
+               opacity: 0.9
+             };
+
+         var polyline = new L.Polyline(polylinePoints, polylineOptions);
+
+         map.addLayer(polyline);                        
+
+         // zoom the map to the polyline
+         map.fitBounds(polyline.getBounds());		 
+		}
+		
     });
 </script>
