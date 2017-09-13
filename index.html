@@ -8,15 +8,19 @@
     <script type="text/javascript" src="https://cdn.rawgit.com/ricmoo/aes-js/e27b99df/index.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-	<style>
-    fieldset { padding:0; border:0; margin-top:25px; }
-  </style>
+    <style>
+        fieldset {
+            padding: 0;
+            border: 0;
+            margin-top: 25px;
+        }
+    </style>
 </head>
 
 <body>
     <div id="dialog-form" title="Enter password:">
         <form>
-            <fieldset>             
+            <fieldset>
                 <input type="password" name="password" id="password" value="xxxxxxx" class="text ui-widget-content ui-corner-all">
                 <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
             </fieldset>
@@ -44,7 +48,7 @@
 
         dialog = $("#dialog-form").dialog({
             closeOnEscape: false,
-			resizable: false,
+            resizable: false,
             open: function(event, ui) {
                 $(".ui-dialog-titlebar-close").hide();
             },
@@ -74,7 +78,7 @@
             },
             close: function() {
                 form[0].reset();
-                allFields.removeClass("ui-state-error");
+                $(this).dialog("close");
             }
         });
 
@@ -110,7 +114,7 @@
             data.reverse();
 
             var options = {
-                type: 'line',
+                type: 'bar',
                 data: {
                     labels: x_range,
                     datasets: [{
@@ -121,6 +125,7 @@
                         borderWidth: 1,
                         fill: false
                     }, {
+                        type: 'line',
                         label: "Cumulative",
                         yAxisID: "y-axis-1",
                         "data": cum,
@@ -194,7 +199,7 @@
             avg_speed.reverse();
 
             var options = {
-                type: 'line',
+                type: 'bar',
                 data: {
                     labels: x_range,
                     datasets: [{
@@ -204,6 +209,9 @@
                         borderColor: "#FF3333",
                         borderWidth: 1
                     }, {
+                        type: 'line',
+                        showLine: false,
+                        pointStyle: 'circle',
                         fill: false,
                         label: 'Avg Speed',
                         data: avg_speed,
@@ -269,7 +277,7 @@
             max_elevation.reverse();
 
             var options = {
-                type: 'line',
+                type: 'bar',
                 data: {
                     labels: x_range,
                     datasets: [{
@@ -279,12 +287,18 @@
                         borderColor: "#FF3333",
                         borderWidth: 1
                     }, {
+                        type: 'line',
+                        showLine: false,
+                        pointStyle: 'triangle',
                         fill: false,
                         label: 'Min Elevation',
                         data: min_elevation,
                         borderColor: "#3e95cd",
                         borderWidth: 1
                     }, {
+                        type: 'line',
+                        showLine: false,
+                        pointStyle: 'circle',
                         fill: false,
                         label: 'Max Elevation',
                         data: max_elevation,
@@ -353,7 +367,7 @@
             data.reverse();
 
             var options = {
-                type: 'line',
+                type: 'bar',
                 data: {
                     labels: x_range,
                     datasets: [{
@@ -364,6 +378,7 @@
                         yAxisID: "y-axis-0",
                         borderWidth: 1
                     }, {
+                        type: 'line',
                         fill: false,
                         label: "Cumulative",
                         yAxisID: "y-axis-1",
