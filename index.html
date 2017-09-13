@@ -2,45 +2,86 @@
 <html>
 
 <head>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js"></script>
     <script type="text/javascript" src="https://cdn.rawgit.com/ricmoo/aes-js/e27b99df/index.js"></script>
-
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+	<style>
+    fieldset { padding:0; border:0; margin-top:25px; }
+  </style>
+</head>
 
 <body>
+    <div id="dialog-form" title="Enter password:">
+        <form>
+            <fieldset>             
+                <input type="password" name="password" id="password" value="xxxxxxx" class="text ui-widget-content ui-corner-all">
+                <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+            </fieldset>
+        </form>
+    </div>
 
-    <body>
-        <canvas id="plotDistance" width="1024" height="200"></canvas>
+    <div id="plots">
+        <canvas id="plotDistance" width="1024" height="200" style="border:1px solid #000000;"></canvas>
         <hr>
-        <canvas id="plotElevation" width="1024" height="200"></canvas>
+        <canvas id="plotElevation" width="1024" height="200" style="border:1px solid #000000;"></canvas>
         <hr>
-        <canvas id="plotSpeed" width="1024" height="200"></canvas>
+        <canvas id="plotSpeed" width="1024" height="200" style="border:1px solid #000000;"></canvas>
         <hr>
-        <canvas id="plotCalories" width="1024" height="200"></canvas>
-    </body>
+        <canvas id="plotCalories" width="1024" height="200" style="border:1px solid #000000;"></canvas>
+    </div>
 </body>
 
 </html>
 
-
 <script type="text/javascript">
-    $(document).ready(function() {
-        var token = GetToken();
+    $("#plots").hide();
 
+    $(document).ready(function() {
         var x_range = [];
 
-        $.ajax({
-            url: "https://www.strava.com/api/v3/athlete/activities?access_token=" + token + "&per_page=200",
-            dataType: 'jsonp',
-            success: function(json) {
-                createXAxis(json);
-                plotDistance(json);
-                plotSpeed(json);
-                plotElevation(json);
-                plotCalories(json);
+        dialog = $("#dialog-form").dialog({
+            closeOnEscape: false,
+			resizable: false,
+            open: function(event, ui) {
+                $(".ui-dialog-titlebar-close").hide();
+            },
+            autoOpen: true,
+            height: 200,
+            width: 230,
+            modal: true,
+            buttons: {
+                "Submit": function() {
+                    var token = GetToken();
+
+                    $.ajax({
+                        url: "https://www.strava.com/api/v3/athlete/activities?access_token=" + token + "&per_page=200",
+                        dataType: 'jsonp',
+                        success: function(json) {
+                            createXAxis(json);
+                            plotDistance(json);
+                            plotSpeed(json);
+                            plotElevation(json);
+                            plotCalories(json);
+                            $("#plots").show();
+                        }
+                    });
+
+                    $(this).dialog("close");
+                }
+            },
+            close: function() {
+                form[0].reset();
+                allFields.removeClass("ui-state-error");
             }
         });
+
+        form = dialog.find("form").on("submit", function(event) {
+            event.preventDefault();
+        });
+
 
         function createXAxis(json) {
             for (var i = 0; i < json.length; i++) {
@@ -388,9 +429,7 @@
         }
 
         function GetToken() {
-
-            var name = prompt("Password:");
-            var key = aesjs.utils.utf8.toBytes(name);
+            var key = aesjs.utils.utf8.toBytes($("#password").val());
 
             var encryptedBytes = aesjs.utils.hex.toBytes("d49e3291adcaebd0a3c4cb83a68c971bb15831248165916a5f7684d448fd0ee01962f4748fe36e70b1");
             var aesCtr = new aesjs.ModeOfOperation.ctr(key, new aesjs.Counter(21));
