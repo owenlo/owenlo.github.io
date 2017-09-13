@@ -1,46 +1,43 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
-	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
-	<link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
+    <link rel="stylesheet" href="css/style.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js"></script>
     <script type="text/javascript" src="https://cdn.rawgit.com/ricmoo/aes-js/e27b99df/index.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>	
-	<script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
-	<script src="scripts/Polyline.encoded.js"></script>
-	<script src="scripts/site.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+    <script src="scripts/Polyline.encoded.js"></script>
+    <script src="scripts/site.js"></script>
 </head>
 
 <body>
     <div id="dialog-form" title="Enter password:">
         <form>
-            <fieldset>             
+            <fieldset>
                 <input type="password" name="password" id="password" value="xxxxxxx" class="text ui-widget-content ui-corner-all">
                 <input type="submit" tabindex="-1" id="submitButton">
             </fieldset>
         </form>
     </div>
 
-	  
-	<div id="map"></div>
-    <div id="plots">				
-		<hr>
+    <div id="map"></div>
+    <div id="plots">
+        <hr>
         <canvas id="plotDistance" class="graph" width="1024" height="200"></canvas>
         <hr>
         <canvas id="plotElevation" class="graph" width="1024" height="200"></canvas>
         <hr>
         <canvas id="plotSpeed" class="graph" width="1024" height="200"></canvas>
         <hr>
-        <canvas id="plotCalories" class="graph" width="1024" height="200"></canvas>			
+        <canvas id="plotCalories" class="graph" width="1024" height="200"></canvas>
     </div>
 </body>
-
 </html>
 
 <script>
-$("#plots").hide();
+    $("#plots").hide();
 </script>
