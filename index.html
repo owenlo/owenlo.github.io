@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
@@ -34,8 +35,39 @@
         <canvas id="plotSpeed" class="graph" width="1024" height="200"></canvas>
         <hr>
         <canvas id="plotCalories" class="graph" width="1024" height="200"></canvas>
+        <hr>
+
+        <h2>Summary Statistics</h2>
+        <table align="center">
+            <tr>
+                <th>Ride Count</th>
+                <th>Total Distance (miles)</th>
+                <th>Average Distance (miles)</th>
+                <th>Total Elevation (ft)</th>
+                <th>Average Elevation (ft)</th>
+                <th>Total Ride Time (hrs)</th>
+                <th>Average Ride Time (mins)</th>
+                <th>Average Speed (mph)</th>
+                <th>Average Calories (kilojoules)</th>
+                <th>Total Calories (kilojoules)</th>
+            </tr>
+            <tr>
+                <td id="count"></td>
+                <td id="total_dist"></td>
+                <td id="avg_dist"></td>
+                <td id="total_elev"></td>
+                <td id="avg_elevation"></td>
+                <td id="total_time"></td>
+                <td id="avg_time"></td>
+                <td id="avg_speed"></td>
+                <td id="avg_calories"></td>
+                <td id="total_calories"></td>
+            </tr>
+        </table>
     </div>
+
 </body>
+
 </html>
 
 <script>

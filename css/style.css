@@ -1,5 +1,29 @@
-fieldset { padding:0; border:0; margin-top:25px; }	
-#submitButton { position:absolute; top:-1000px; }
-#map { height: 550px;}
-.graph { border:1px solid #000000; }
-
+fieldset {
+    padding: 0;
+    border: 0;
+    margin-top: 25px;
+}
+#submitButton {
+    position: absolute;
+    top: -1000px;
+}
+#map {
+    height: 550px;
+}
+.graph {
+    border: 1px solid #000000;
+}
+table {
+    width: 100%;
+}
+table,
+th,
+td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th,
+td {
+    padding: 5px;
+    text-align: center;
+}
