@@ -34,7 +34,7 @@ $(document).ready(function() {
                         parseStravaData(json);
                         mapData(json);
                         plotGraphType1('Distance Travelled', distance, cum_distance, 'Distance', 'Miles', 'plotDistance');
-                        plotGraphType2('Elevation Gain', 'Min Gain', 'Max Gain', elevation, min_elevation, max_elevation, 'Elevation', 'Feet', 'plotElevation');
+                        plotGraphType2('Elevation Gain', 'Min Elevation', 'Max Elevation', elevation, min_elevation, max_elevation, 'Elevation', 'Meters', 'plotElevation');
                         plotGraphType3('Max Speed', 'Avg Speed', max_speed, avg_speed, 'Speed', 'Miles Per Hour', 'plotSpeed');
                         plotGraphType1('Calories', calories, cum_calories, 'Calories', 'Kilojoules', 'plotCalories');
                         generateStatistics();
@@ -61,22 +61,22 @@ $(document).ready(function() {
             distance.push(round((json[i].distance * 0.000621371), 2));
             max_speed.push(round((json[i].max_speed * 2.23694), 2));
             avg_speed.push(round((json[i].average_speed * 2.23694), 2));
-            elevation.push(round((json[i].total_elevation_gain * 3.28084), 2));
-            min_elevation.push(round((json[i].elev_low * 3.28084), 2));
-            max_elevation.push(round((json[i].elev_high * 3.28084), 2));
+            elevation.push(json[i].total_elevation_gain);
+            min_elevation.push(json[i].elev_low);
+            max_elevation.push(json[i].elev_high);
             calories.push(round((json[i].kilojoules), 2));
 
             if (i == 0) {
                 cum_distance.push(round((json[i].distance * 0.000621371), 2));
                 cum_calories.push(round((json[i].kilojoules), 2));
                 time.push(json[i].elapsed_time / 60);
-                cum_elevation.push(round((json[i].total_elevation_gain * 3.28084), 2));
+                cum_elevation.push(json[i].total_elevation_gain);
                 cum_speed.push(round((json[i].average_speed * 2.23694), 2));
             } else {
                 cum_distance.push(round((cum_distance[i - 1] + json[i].distance * 0.000621371), 2));
                 cum_calories.push(round((cum_calories[i - 1] + json[i].kilojoules), 2));
                 time.push(round((time[i - 1] + json[i].elapsed_time / 60), 2));
-                cum_elevation.push(round((cum_elevation[i - 1] + json[i].total_elevation_gain * 3.28084), 2));
+                cum_elevation.push(cum_elevation[i - 1] + json[i].total_elevation_gain);
                 cum_speed.push(round((cum_speed[i - 1] + json[i].average_speed * 2.23694), 2));
             }
         }
@@ -179,7 +179,7 @@ $(document).ready(function() {
                     borderWidth: 1
                 }, {
                     type: 'line',
-                    showLine: false,
+                    showLine: true,
                     pointStyle: 'triangle',
                     fill: false,
                     label: label2,
@@ -188,7 +188,7 @@ $(document).ready(function() {
                     borderWidth: 1
                 }, {
                     type: 'line',
-                    showLine: false,
+                    showLine: true,
                     pointStyle: 'circle',
                     fill: false,
                     label: label3,
@@ -252,7 +252,7 @@ $(document).ready(function() {
                     borderWidth: 1
                 }, {
                     type: 'line',
-                    showLine: false,
+                    showLine: true,
                     pointStyle: 'circle',
                     fill: false,
                     label: label2,
@@ -349,11 +349,11 @@ $(document).ready(function() {
         map.fitBounds(polyline.getBounds());
     }
 
-    function generateStatistics(json) {
+    function generateStatistics() {
         $("#count").html(x_range.length);
         $("#total_dist").html(round((cum_distance[cum_distance.length - 1]), 2));
         $("#avg_dist").html(round((cum_distance[cum_distance.length - 1] / cum_distance.length), 2));
-        $("#total_elev").html(cum_elevation[cum_elevation.length - 1]);
+        $("#total_elev").html(round(cum_elevation[cum_elevation.length - 1], 2));
         $("#avg_elevation").html(round((cum_elevation[cum_elevation.length - 1] / cum_elevation.length), 2));
         $("#total_time").html(time[time.length - 1] / 60);
         $("#avg_time").html(round((time[time.length - 1] / time.length), 2));
