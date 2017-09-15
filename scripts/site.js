@@ -355,7 +355,7 @@ $(document).ready(function() {
         $("#avg_dist").html(round((cum_distance[cum_distance.length - 1] / cum_distance.length), 2));
         $("#total_elev").html(round(cum_elevation[cum_elevation.length - 1], 2));
         $("#avg_elevation").html(round((cum_elevation[cum_elevation.length - 1] / cum_elevation.length), 2));
-        $("#total_time").html(time[time.length - 1] / 60);
+        $("#total_time").html(round((time[time.length - 1] / 60), 2));
         $("#avg_time").html(round((time[time.length - 1] / time.length), 2));
         $("#avg_speed").html(round((cum_speed[cum_speed.length - 1] / cum_speed.length), 2));
         $("#avg_calories").html(round((cum_calories[cum_calories.length - 2] / cum_calories.length), 2));
