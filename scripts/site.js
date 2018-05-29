@@ -33,6 +33,7 @@ $(document).ready(function() {
                     url: "https://www.strava.com/api/v3/athlete/activities?access_token=" + token + "&per_page=200",
                     dataType: 'jsonp',
                     success: function(json) {
+						filterData(json);
                         parseStravaData(json);
                         mapData(json);
                         plotGraphType1('Distance Travelled', 'Cumulative', distance, cum_distance, 'Distance', 'Miles', 'Miles', 'plotDistance');
@@ -56,6 +57,17 @@ $(document).ready(function() {
     form = dialog.find("form").on("submit", function(event) {
         event.preventDefault();
     });
+	
+	//Filter JSON data so that only rides are included.
+	function filterData(json) {
+		for(var i = 0; i < json.length; i++)
+		{
+			if(json[i].type != "Ride")
+			{
+				json.splice(i, 1);
+			}
+		}
+	}
 
     function parseStravaData(json) {
         for (var i = 0; i < json.length; i++) {
